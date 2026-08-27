@@ -1,0 +1,45 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        Map<Integer, Integer> freq = new HashMap<>();
+
+        // First window
+        for (int i = 0; i < k; i++) {
+            freq.put(arr[i], freq.getOrDefault(arr[i], 0) + 1);
+        }
+
+        int maxUnique = freq.size();
+
+        // Slide the window
+        for (int i = k; i < n; i++) {
+            // Add the new element
+            freq.put(arr[i], freq.getOrDefault(arr[i], 0) + 1);
+
+            // Remove the element leaving the window
+            int outgoing = arr[i - k];
+
+            if (freq.get(outgoing) == 1) {
+                freq.remove(outgoing);
+            } else {
+                freq.put(outgoing, freq.get(outgoing) - 1);
+            }
+
+            maxUnique = Math.max(maxUnique, freq.size());
+        }
+
+        System.out.println(maxUnique);
+
+        sc.close();
+    }
+}
